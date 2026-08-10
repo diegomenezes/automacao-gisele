@@ -388,6 +388,7 @@ export function createAdminRouter(): Router {
     await renderPage(res, "google.ejs", {
       title: "Google",
       calendarId: config.google.calendarId,
+      impersonateUser: config.google.impersonateUser || null,
       upcoming,
       calendarError,
     });
