@@ -1,0 +1,42 @@
+<h1>Google — Agenda e Drive</h1>
+
+<div class="card">
+  <h2 style="margin-top:0">Google Calendar</h2>
+  <p><strong>Calendário ID:</strong> <code><%= calendarId %></code></p>
+  <p><strong>Captações na janela (15 dias):</strong> <%= upcoming.length %></p>
+
+  <% if (calendarError) { %>
+    <p class="error"><%= calendarError %></p>
+  <% } else if (upcoming.length > 0) { %>
+    <table>
+      <thead>
+        <tr><th>Evento</th><th>Especialista</th><th>Captação</th><th>Config</th></tr>
+      </thead>
+      <tbody>
+        <% upcoming.forEach(e => { %>
+        <tr>
+          <td><%= e.title %></td>
+          <td><%= e.specialistLabel %></td>
+          <td><%= e.captureDateStr %></td>
+          <td><%= e.matched ? '✅ ' + e.matchedName : '⚠️ sem config' %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } else { %>
+    <p class="stat-label">Nenhum evento CAPTAÇÃO na janela.</p>
+  <% } %>
+</div>
+
+<div class="card">
+  <h2 style="margin-top:0">Setup Service Account</h2>
+  <ol style="color: var(--muted); padding-left: 1.2rem;">
+    <li>Google Cloud: ativar Calendar, Drive e Docs API</li>
+    <li>Criar service account → baixar <code>credentials.json</code></li>
+    <li>Compartilhar o calendário com o email da service account</li>
+    <li>Compartilhar cada raiz Drive de especialista como <strong>Editor</strong></li>
+    <li>Cadastrar especialistas em <a href="/admin/specialists">Especialistas</a></li>
+  </ol>
+</div>
+
+<p><a href="/admin/integrations">Evolution API →</a></p>

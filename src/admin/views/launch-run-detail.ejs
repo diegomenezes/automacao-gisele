@@ -1,0 +1,53 @@
+<h1>Lançamento: <%= launchRun.specialist %> — <%= launchRun.launch_folder_name %></h1>
+
+<div class="card">
+  <p><strong>Evento:</strong> <%= launchRun.calendar_event_title || '—' %></p>
+  <p><strong>Captação:</strong> <%= launchRun.capture_date %></p>
+  <p><strong>Drive:</strong>
+    <% if (launchRun.drive_folder_url) { %>
+      <a href="<%= launchRun.drive_folder_url %>" target="_blank">Abrir pasta</a>
+    <% } else { %>—<% } %>
+  </p>
+  <div class="steps">
+    <span class="badge badge-<%= launchRun.step_drive %>">drive: <%= launchRun.step_drive %></span>
+    <span class="badge badge-<%= launchRun.step_templates %>">templates: <%= launchRun.step_templates %></span>
+    <span class="badge badge-<%= launchRun.step_briefing %>">briefing: <%= launchRun.step_briefing %></span>
+    <span class="badge badge-<%= launchRun.step_whatsapp %>">whatsapp: <%= launchRun.step_whatsapp %></span>
+  </div>
+  <% if (launchRun.error_message) { %>
+    <h2>Erro</h2>
+    <p class="error"><%= launchRun.error_message %></p>
+    <% if (launchRun.error_stack) { %>
+      <pre><%= launchRun.error_stack %></pre>
+    <% } %>
+  <% } %>
+
+  <% const failedSteps = ['drive','templates','briefing','whatsapp'].filter(s => launchRun['step_' + s] === 'failed'); %>
+  <% if (failedSteps.length > 0 || launchRun.error_message) { %>
+    <form method="post" action="/admin/launch-runs/<%= launchRun.id %>/retry" style="margin-top: 1rem">
+      <button type="submit" class="btn">Reprocessar</button>
+    </form>
+  <% } %>
+</div>
+
+<h2>Logs</h2>
+<div class="card">
+  <% if (logs.length === 0) { %>
+    <p>Sem logs.</p>
+  <% } else { %>
+    <table>
+      <thead><tr><th>Hora</th><th>Nível</th><th>Mensagem</th></tr></thead>
+      <tbody>
+        <% logs.forEach(log => { %>
+        <tr>
+          <td><%= log.created_at %></td>
+          <td class="log-<%= log.level %>"><%= log.level %></td>
+          <td><%= log.message %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</div>
+
+<p><a href="/admin/runs/<%= launchRun.job_run_id %>">← Voltar à execução</a></p>

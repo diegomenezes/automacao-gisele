@@ -1,0 +1,44 @@
+<h1>Disparo manual</h1>
+
+<div class="card">
+  <% if (message) { %><p class="<%= messageType === 'error' ? 'error' : '' %>"><%= message %></p><% } %>
+
+  <form method="post" action="/admin/trigger">
+    <label>Especialista (config cadastrada)</label>
+    <select name="specialistConfigId">
+      <option value="">Selecione...</option>
+      <% specialists.forEach(s => { %>
+      <option value="<%= s.id %>"><%= s.name %></option>
+      <% }) %>
+    </select>
+
+    <label>Data da captação</label>
+    <input type="date" name="captureDate" required>
+
+    <label>ID do evento no Calendar (opcional — ignora campos acima)</label>
+    <input type="text" name="calendarEventId" placeholder="event id do Google Calendar">
+
+    <button type="submit" class="btn">Disparar pré-lançamento</button>
+  </form>
+</div>
+
+<% if (upcoming.length > 0) { %>
+<h2>Eventos na janela (referência)</h2>
+<div class="card">
+  <table>
+    <thead><tr><th>Evento</th><th>Especialista</th><th>Captação</th><th>Event ID</th></tr></thead>
+    <tbody>
+      <% upcoming.forEach(e => { %>
+      <tr>
+        <td><%= e.title %></td>
+        <td><%= e.specialist %></td>
+        <td><%= e.captureDateStr %></td>
+        <td><code><%= e.eventId %></code></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<% } %>
+
+<p><a href="/admin/specialists">Cadastrar especialistas →</a></p>

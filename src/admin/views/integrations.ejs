@@ -1,0 +1,68 @@
+<h1>Integrações — Evolution API</h1>
+
+<div class="card">
+  <h2 style="margin-top:0">Status da instância</h2>
+  <p><strong>URL:</strong> <%= evolution.url || '—' %></p>
+  <p><strong>Instância:</strong> <%= evolution.instance %></p>
+  <p><strong>Grupo configurado:</strong> <code><%= evolution.groupId || '—' %></code></p>
+  <p><strong>Estado:</strong>
+    <% if (connection.connected) { %>
+      <span class="badge badge-success">conectado (<%= connection.state %>)</span>
+    <% } else { %>
+      <span class="badge badge-failed"><%= connection.state %></span>
+    <% } %>
+  </p>
+  <% if (connectionError) { %>
+    <p class="error"><%= connectionError %></p>
+  <% } %>
+</div>
+
+<div class="card">
+  <h2 style="margin-top:0">Testar envio</h2>
+  <% if (message) { %>
+    <p class="<%= messageType === 'error' ? 'error' : '' %>"><%= message %></p>
+  <% } %>
+  <form method="post" action="/admin/integrations/test-whatsapp">
+    <label>Mensagem de teste</label>
+    <input type="text" name="text" value="✅ Teste Evolution API — Agente de Pré-Lançamento" style="margin-bottom:0.75rem">
+    <button type="submit" class="btn">Enviar teste no grupo configurado</button>
+  </form>
+  <p class="stat-label" style="margin-top:0.75rem">
+    O grupo deve estar em formato JID (<code>120363...@g.us</code>) ou ID numérico longo.
+  </p>
+</div>
+
+<% if (groups.length > 0) { %>
+<div class="card">
+  <h2 style="margin-top:0">Grupos da instância (referência)</h2>
+  <table>
+    <thead><tr><th>Nome</th><th>Group JID (use no WHATSAPP_GROUP_ID)</th></tr></thead>
+    <tbody>
+      <% groups.forEach(g => { %>
+      <tr>
+        <td><%= g.name %></td>
+        <td><code><%= g.id %></code></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<% } else if (!groupsError) { %>
+<div class="card">
+  <p class="stat-label">Nenhum grupo listado ou instância sem permissão para listar grupos.</p>
+</div>
+<% } %>
+
+<% if (groupsError) { %>
+<div class="card">
+  <p class="error">Erro ao listar grupos: <%= groupsError %></p>
+</div>
+<% } %>
+
+<div class="card">
+  <h2 style="margin-top:0">Variáveis .env</h2>
+  <pre>EVOLUTION_API_URL=<%= evolution.url || 'https://sua-evolution.com' %>
+EVOLUTION_API_KEY=sua-api-key
+EVOLUTION_INSTANCE=nome-da-instancia
+WHATSAPP_GROUP_ID=120363419104615012@g.us</pre>
+</div>

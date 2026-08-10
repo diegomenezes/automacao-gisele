@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> — Agente Pré-Lançamento</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #1a2332;
+      --border: #2d3a4f;
+      --text: #e7ecf3;
+      --muted: #8b9cb3;
+      --accent: #3b82f6;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --error: #ef4444;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      line-height: 1.5;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .layout { max-width: 1100px; margin: 0 auto; padding: 1.5rem; }
+    nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+    nav a { color: var(--muted); }
+    nav a.active, nav a:hover { color: var(--text); }
+    nav .spacer { flex: 1; }
+    h1 { font-size: 1.5rem; margin: 0 0 1rem; }
+    h2 { font-size: 1.1rem; margin: 1.5rem 0 0.75rem; color: var(--muted); }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+    .stat-value { font-size: 2rem; font-weight: 600; }
+    .stat-label { color: var(--muted); font-size: 0.875rem; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-size: 0.8rem; text-transform: uppercase; }
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-success { background: rgba(34,197,94,0.2); color: var(--success); }
+    .badge-failed { background: rgba(239,68,68,0.2); color: var(--error); }
+    .badge-partial { background: rgba(245,158,11,0.2); color: var(--warning); }
+    .badge-running { background: rgba(59,130,246,0.2); color: var(--accent); }
+    .badge-pending { background: rgba(139,156,179,0.2); color: var(--muted); }
+    .btn {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    .btn:hover { filter: brightness(1.1); text-decoration: none; color: white; }
+    .btn-secondary { background: var(--border); }
+    .btn-danger { background: var(--error); }
+    form label { display: block; margin-bottom: 0.25rem; color: var(--muted); font-size: 0.875rem; }
+    form input, form select, form textarea {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 0.75rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+    }
+    .login-box {
+      max-width: 360px;
+      margin: 4rem auto;
+    }
+    .error { color: var(--error); margin-bottom: 1rem; }
+    .log-error { color: var(--error); }
+    .log-warn { color: var(--warning); }
+    .steps { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .step { font-size: 0.75rem; }
+    pre {
+      background: var(--bg);
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <% if (!hideNav) { %>
+  <div class="layout">
+    <nav>
+      <a href="/admin">Dashboard</a>
+      <a href="/admin/runs">Histórico</a>
+      <a href="/admin/trigger">Disparo manual</a>
+      <a href="/admin/specialists">Especialistas</a>
+      <a href="/admin/google">Google</a>
+      <a href="/admin/integrations">Evolution API</a>
+      <span class="spacer"></span>
+      <form action="/admin/logout" method="post" style="display:inline">
+        <button type="submit" class="btn btn-secondary">Sair</button>
+      </form>
+    </nav>
+  <% } %>
+  <%= body %>
+  <% if (!hideNav) { %>
+  </div>
+  <% } %>
+</body>
+</html>

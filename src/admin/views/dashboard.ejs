@@ -1,0 +1,88 @@
+<h1>Dashboard</h1>
+
+<% if (evolution) { %>
+<div class="card">
+  <p><strong>Evolution API:</strong>
+    <% if (evolution.connected) { %>
+      <span class="badge badge-success">conectada (<%= evolution.state %>)</span>
+    <% } else { %>
+      <span class="badge badge-failed"><%= evolution.state %></span>
+    <% } %>
+    — <a href="/admin/integrations">Configurar / testar</a>
+  </p>
+</div>
+<% } %>
+
+<div class="grid">
+  <div class="card">
+    <div class="stat-value"><%= stats.totalPrepared %></div>
+    <div class="stat-label">Lançamentos preparados</div>
+  </div>
+  <div class="card">
+    <div class="stat-value"><%= stats.failedLaunchRuns %></div>
+    <div class="stat-label">Falhas pendentes</div>
+  </div>
+  <div class="card">
+    <div class="stat-value"><%= upcoming.length %></div>
+    <div class="stat-label">Captações na janela (15 dias)</div>
+  </div>
+</div>
+
+<% if (stats.lastRun) { %>
+<h2>Última execução</h2>
+<div class="card">
+  <p><strong>Trigger:</strong> <%= stats.lastRun.trigger %></p>
+  <p><strong>Início:</strong> <%= stats.lastRun.started_at %></p>
+  <p><strong>Status:</strong> <span class="badge badge-<%= stats.lastRun.status %>"><%= stats.lastRun.status %></span></p>
+  <p><strong>Eventos:</strong> <%= stats.lastRun.events_found %> encontrados, <%= stats.lastRun.events_processed %> processados</p>
+  <% if (stats.lastRun.error_message) { %>
+    <p class="error"><%= stats.lastRun.error_message %></p>
+  <% } %>
+  <a href="/admin/runs/<%= stats.lastRun.id %>" class="btn btn-secondary">Ver detalhes</a>
+</div>
+<% } %>
+
+<h2>Captações na janela</h2>
+<div class="card">
+  <% if (upcoming.length === 0) { %>
+    <p class="stat-label">Nenhuma captação nos próximos 15 dias.</p>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr><th>Evento</th><th>Especialista</th><th>Captação</th><th>Próxima pasta</th><th>Preparado</th></tr>
+      </thead>
+      <tbody>
+        <% upcoming.forEach(e => { %>
+        <tr>
+          <td><%= e.title %></td>
+          <td><%= e.specialist %></td>
+          <td><%= e.captureDateStr %></td>
+          <td><%= e.nextFolder || '—' %></td>
+          <td><%= e.prepared ? '✅' : '—' %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</div>
+
+<% if (failedRuns.length > 0) { %>
+<h2>Falhas recentes</h2>
+<div class="card">
+  <table>
+    <thead>
+      <tr><th>Especialista</th><th>Lançamento</th><th>Erro</th><th></th></tr>
+    </thead>
+    <tbody>
+      <% failedRuns.forEach(r => { %>
+      <tr>
+        <td><%= r.specialist %></td>
+        <td><%= r.launch_folder_name %></td>
+        <td class="log-error"><%= r.error_message || 'Step failed' %></td>
+        <td><a href="/admin/launch-runs/<%= r.id %>">Detalhes</a></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<% } %>

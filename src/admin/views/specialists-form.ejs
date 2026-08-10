@@ -1,0 +1,47 @@
+<h1><%= specialist.id ? 'Editar' : 'Novo' %> especialista</h1>
+
+<div class="card">
+  <% if (error) { %><p class="error"><%= error %></p><% } %>
+
+  <form method="post" action="<%= specialist.id ? '/admin/specialists/' + specialist.id : '/admin/specialists' %>">
+    <label>Nome (ex.: Eric, Murilo)</label>
+    <input type="text" name="name" value="<%= specialist.name %>" required>
+
+    <label>Aliases no Google Agenda (um por linha — ex.: Eric, ENG. ERIC)</label>
+    <textarea name="calendar_aliases" rows="3" required><%= specialist.calendar_aliases.join('\n') %></textarea>
+
+    <label>ID pasta raiz no Drive</label>
+    <input type="text" name="drive_root_folder_id" value="<%= specialist.drive_root_folder_id %>" required placeholder="ID da pasta ENG. ERIC SOUZA...">
+    <p class="stat-label">Compartilhe esta pasta com a service account (Editor).</p>
+
+    <label>Caminho até pasta COPY (um segmento por linha)</label>
+    <textarea name="path_segments" rows="4" required placeholder="1) FÁBRICA DE PROJETISTAS&#10;1) COPY"><%= specialist.path_segments.join('\n') %></textarea>
+
+    <label>Template nome da pasta — use {{n}} ou {{nn}}</label>
+    <input type="text" name="folder_name_template" value="<%= specialist.folder_name_template %>" required placeholder="01.{{n}}) Copy - FP{{n}} ou FPRO{{n}}">
+
+    <label>Regex para parse (captura grupos)</label>
+    <input type="text" name="folder_parse_regex" value="<%= specialist.folder_parse_regex %>" required placeholder="^(\d{2})\.(\d{2})\) Copy - FP(\d{2})$">
+
+    <label>Grupo do regex que incrementa (1 = primeiro grupo)</label>
+    <input type="number" name="increment_group" value="<%= specialist.increment_group %>" min="1" required>
+
+    <label>Número inicial (se não há pasta anterior)</label>
+    <input type="number" name="initial_number" value="<%= specialist.initial_number %>" min="1" required>
+
+    <label>ID modelo Copy (opcional — fallback TEMPLATE_COPY_ID)</label>
+    <input type="text" name="template_copy_id" value="<%= specialist.template_copy_id || '' %>">
+
+    <label>
+      <input type="checkbox" name="enabled" value="1" <%= specialist.enabled ? 'checked' : '' %>>
+      Ativo
+    </label>
+
+    <button type="submit" class="btn">Salvar</button>
+    <% if (specialist.id) { %>
+      <a href="/admin/specialists/<%= specialist.id %>/preview" class="btn btn-secondary">Testar preview Drive</a>
+    <% } %>
+  </form>
+</div>
+
+<p><a href="/admin/specialists">← Voltar</a></p>

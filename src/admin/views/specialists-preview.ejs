@@ -1,0 +1,40 @@
+<h1>Preview: <%= specialist.name %></h1>
+
+<div class="card">
+  <p><strong>Raiz Drive:</strong> <code><%= specialist.drive_root_folder_id %></code></p>
+  <p><strong>Caminho resolvido:</strong> <%= preview.resolvedPath.join(' → ') || '—' %></p>
+
+  <% if (error) { %>
+    <p class="error"><%= error %></p>
+  <% } else { %>
+    <p><strong>Próxima pasta:</strong> <code><%= preview.plan.folderName %></code> (número <%= preview.plan.nextNumber %>)</p>
+    <% if (preview.plan.previousFolderName) { %>
+      <p><strong>Pasta anterior:</strong> <%= preview.plan.previousFolderName %></p>
+    <% } else { %>
+      <p class="stat-label">Sem pasta anterior — será o primeiro lançamento numerado.</p>
+    <% } %>
+  <% } %>
+</div>
+
+<% if (existingFolders && existingFolders.length > 0) { %>
+<div class="card">
+  <h2 style="margin-top:0">Pastas existentes no COPY</h2>
+  <table>
+    <thead><tr><th>Nome</th><th>Nº</th></tr></thead>
+    <tbody>
+      <% existingFolders.forEach(f => { %>
+      <tr>
+        <td><%= f.name %></td>
+        <td><%= f.increment %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<% } %>
+
+<p>
+  <a href="/admin/specialists/<%= specialist.id %>/edit">Editar config</a>
+  ·
+  <a href="/admin/specialists">Lista</a>
+</p>

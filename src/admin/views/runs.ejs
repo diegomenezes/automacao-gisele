@@ -1,0 +1,26 @@
+<h1>Histórico de execuções</h1>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Início</th>
+        <th>Trigger</th>
+        <th>Status</th>
+        <th>Eventos</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% runs.forEach(run => { %>
+      <tr>
+        <td><%= run.started_at %></td>
+        <td><%= run.trigger %></td>
+        <td><span class="badge badge-<%= run.status %>"><%= run.status %></span></td>
+        <td><%= run.events_found %> / <%= run.events_processed %></td>
+        <td><a href="/admin/runs/<%= run.id %>">Detalhes</a></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

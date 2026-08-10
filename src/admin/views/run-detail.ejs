@@ -1,0 +1,66 @@
+<h1>Execução <%= run.id.slice(0, 8) %>...</h1>
+
+<div class="card">
+  <p><strong>Trigger:</strong> <%= run.trigger %></p>
+  <p><strong>Início:</strong> <%= run.started_at %></p>
+  <p><strong>Fim:</strong> <%= run.finished_at || '—' %></p>
+  <p><strong>Status:</strong> <span class="badge badge-<%= run.status %>"><%= run.status %></span></p>
+  <% if (run.error_message) { %><p class="error"><%= run.error_message %></p><% } %>
+</div>
+
+<h2>Lançamentos processados</h2>
+<div class="card">
+  <% if (launchRuns.length === 0) { %>
+    <p>Nenhum lançamento nesta execução.</p>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Especialista</th>
+          <th>Pasta lançamento</th>
+          <th>Captação</th>
+          <th>Etapas</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% launchRuns.forEach(lr => { %>
+        <tr>
+          <td><%= lr.specialist %></td>
+          <td><%= lr.launch_folder_name %></td>
+          <td><%= lr.capture_date %></td>
+          <td>
+            <div class="steps">
+              <span class="step badge badge-<%= lr.step_drive %>">drive</span>
+              <span class="step badge badge-<%= lr.step_templates %>">templates</span>
+              <span class="step badge badge-<%= lr.step_briefing %>">briefing</span>
+              <span class="step badge badge-<%= lr.step_whatsapp %>">whatsapp</span>
+            </div>
+          </td>
+          <td><a href="/admin/launch-runs/<%= lr.id %>">Detalhes</a></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</div>
+
+<h2>Logs</h2>
+<div class="card">
+  <% if (logs.length === 0) { %>
+    <p>Sem logs.</p>
+  <% } else { %>
+    <table>
+      <thead><tr><th>Hora</th><th>Nível</th><th>Mensagem</th></tr></thead>
+      <tbody>
+        <% logs.forEach(log => { %>
+        <tr>
+          <td><%= log.created_at %></td>
+          <td class="log-<%= log.level %>"><%= log.level %></td>
+          <td><%= log.message %></td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</div>

@@ -1,0 +1,38 @@
+<h1>Especialistas</h1>
+
+<div class="card">
+  <p>
+    <a href="/admin/specialists/new" class="btn">+ Novo especialista</a>
+  </p>
+
+  <% if (specialists.length === 0) { %>
+    <p class="stat-label">Nenhum especialista configurado. Cadastre Eric, Murilo, etc. com raiz Drive, caminho até COPY e template de nome.</p>
+  <% } else { %>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Aliases Agenda</th>
+          <th>Template pasta</th>
+          <th>Ativo</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% specialists.forEach(s => { %>
+        <tr>
+          <td><%= s.name %></td>
+          <td><%= s.calendar_aliases.join(', ') %></td>
+          <td><code><%= s.folder_name_template %></code></td>
+          <td><%= s.enabled ? '✅' : '—' %></td>
+          <td>
+            <a href="/admin/specialists/<%= s.id %>/edit">Editar</a>
+            ·
+            <a href="/admin/specialists/<%= s.id %>/preview">Preview</a>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</div>
