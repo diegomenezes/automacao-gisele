@@ -2,8 +2,11 @@ import type { SpecialistConfig, LaunchFolderPlan } from "../types";
 import { listChildFolders, resolvePathFolder } from "./pathNavigator";
 
 export function formatFolderNameFromTemplate(template: string, n: number): string {
+  const withOffsets = template.replace(/\{\{n([+-]\d+)\}\}/g, (_match, offset) => {
+    return String(n + parseInt(offset, 10));
+  });
   const nn = String(n).padStart(2, "0");
-  return template.replace(/\{\{nn\}\}/g, nn).replace(/\{\{n\}\}/g, String(n));
+  return withOffsets.replace(/\{\{nn\}\}/g, nn).replace(/\{\{n\}\}/g, String(n));
 }
 
 export function parseFolderIncrement(
