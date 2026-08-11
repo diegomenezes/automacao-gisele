@@ -1,5 +1,5 @@
 export const BRIEFING_PROMPT = `Objetivo:
-Extrair somente:
+Com base no documento de copy do último lançamento, extrair somente:
 
 - Nome do evento
 - Promessa
@@ -11,7 +11,10 @@ Extrair somente:
 - Headline principal
 - CTA principal
 
-Responder em Markdown.
+Regras:
+- Responder em Markdown.
+- Se um campo não estiver no texto, escrever "Não informado" (não invente e não use placeholders como [Preço]).
+- Priorize informações concretas (valores, nomes, ofertas) quando existirem.
 
 Conteúdo do documento de copy do último lançamento:
 

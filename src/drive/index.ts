@@ -74,8 +74,16 @@ export async function findFirstGoogleDocInFolder(folderId: string): Promise<stri
     includeItemsFromAllDrives: true,
   });
 
-  const file = response.data.files?.[0];
-  return file?.id ?? null;
+  const files = response.data.files ?? [];
+  if (!files.length) return null;
+
+  // Prefer the launch copy doc when multiple Google Docs exist in the folder.
+  const preferred =
+    files.find((f) => /copy/i.test(f.name ?? "") && /lan[cç]amento/i.test(f.name ?? "")) ??
+    files.find((f) => /copy/i.test(f.name ?? "")) ??
+    files[0];
+
+  return preferred.id ?? null;
 }
 
 export async function uploadTextFile(
