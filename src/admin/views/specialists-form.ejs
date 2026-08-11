@@ -17,8 +17,8 @@
     <label>Caminho até pasta COPY (um segmento por linha)</label>
     <textarea name="path_segments" rows="4" required placeholder="1) FÁBRICA DE PROJETISTAS&#10;1) COPY"><%= specialist.path_segments.join('\n') %></textarea>
 
-    <label>Template nome da pasta — use {{n}} ou {{nn}}</label>
-    <input type="text" name="folder_name_template" value="<%= specialist.folder_name_template %>" required placeholder="01.{{n}}) Copy - FP{{n}} ou FPRO{{n}}">
+    <label>Template nome da pasta — use {{n}}, {{nn}} ou {{n-8}}/{{n+1}}</label>
+    <input type="text" name="folder_name_template" value="<%= specialist.folder_name_template %>" required placeholder="01.{{n}}) Copy - FP{{n}} ou 1.{{n-8}}) Copy - FPRO{{n}}">
 
     <label>Regex para parse (captura grupos)</label>
     <input type="text" name="folder_parse_regex" value="<%= specialist.folder_parse_regex %>" required placeholder="^(\d{2})\.(\d{2})\) Copy - FP(\d{2})$">
