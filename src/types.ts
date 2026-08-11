@@ -62,6 +62,14 @@ export interface CaptureEvent {
   captureDate: Date;
 }
 
+export interface LaunchAssetsConfig {
+  links_file_template: string;
+  static_captacao_template: string;
+  static_lembrete_template: string;
+  static_carrinho_template: string;
+  video_captacao_template: string;
+}
+
 export interface SpecialistConfig {
   id: string;
   name: string;
@@ -73,6 +81,7 @@ export interface SpecialistConfig {
   increment_group: number;
   initial_number: number;
   template_copy_id: string | null;
+  launch_assets: LaunchAssetsConfig | null;
   enabled: boolean;
   created_at: string;
   updated_at: string;

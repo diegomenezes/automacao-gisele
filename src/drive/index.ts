@@ -4,6 +4,8 @@ import { logger } from "../utils/logger";
 import { ensureFolderInParent } from "./pathNavigator";
 import { getDriveClient } from "./client";
 export { getDriveClient, findFolderByName } from "./client";
+export { createLaunchSupportAssets } from "./launchAssets";
+export type { LaunchAssetsConfig, LaunchAssetsResult } from "./launchAssets";
 
 export interface LaunchFolderResult {
   launchFolderId: string;

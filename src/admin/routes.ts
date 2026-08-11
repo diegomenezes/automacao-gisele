@@ -40,7 +40,7 @@ import {
   isEvolutionConfigured,
 } from "../whatsapp/evolutionClient";
 import { sendTestMessage } from "../whatsapp";
-import type { SpecialistConfig } from "../types";
+import type { LaunchAssetsConfig, SpecialistConfig } from "../types";
 
 const viewsPath = path.join(__dirname, "views");
 
@@ -54,8 +54,35 @@ const emptySpecialistForm = (): Omit<SpecialistConfig, "id" | "created_at" | "up
   increment_group: 1,
   initial_number: 1,
   template_copy_id: null,
+  launch_assets: null,
   enabled: true,
 });
+
+function parseLaunchAssetsFromBody(body: Record<string, unknown>): LaunchAssetsConfig | null {
+  const links = String(body.links_file_template || "").trim();
+  const staticCaptacao = String(body.static_captacao_template || "").trim();
+  const staticLembrete = String(body.static_lembrete_template || "").trim();
+  const staticCarrinho = String(body.static_carrinho_template || "").trim();
+  const videoCaptacao = String(body.video_captacao_template || "").trim();
+
+  if (!links && !staticCaptacao && !staticLembrete && !staticCarrinho && !videoCaptacao) {
+    return null;
+  }
+
+  if (!links || !staticCaptacao || !staticLembrete || !staticCarrinho || !videoCaptacao) {
+    throw new Error(
+      "Templates de assets incompletos: preencha links, estáticos (captação/lembrete/carrinho) e vídeo captação — ou deixe todos vazios"
+    );
+  }
+
+  return {
+    links_file_template: links,
+    static_captacao_template: staticCaptacao,
+    static_lembrete_template: staticLembrete,
+    static_carrinho_template: staticCarrinho,
+    video_captacao_template: videoCaptacao,
+  };
+}
 
 async function renderPage(
   res: Response,
@@ -255,6 +282,7 @@ export function createAdminRouter(): Router {
         increment_group: parseInt(req.body.increment_group, 10) || 1,
         initial_number: parseInt(req.body.initial_number, 10) || 1,
         template_copy_id: req.body.template_copy_id?.trim() || null,
+        launch_assets: parseLaunchAssetsFromBody(req.body),
         enabled: req.body.enabled === "1",
       });
       res.redirect("/admin/specialists");
@@ -273,6 +301,7 @@ export function createAdminRouter(): Router {
           increment_group: parseInt(req.body.increment_group, 10) || 1,
           initial_number: parseInt(req.body.initial_number, 10) || 1,
           template_copy_id: req.body.template_copy_id?.trim() || null,
+          launch_assets: null,
           enabled: req.body.enabled === "1",
         },
         error: (error as Error).message,
@@ -305,6 +334,7 @@ export function createAdminRouter(): Router {
         increment_group: parseInt(req.body.increment_group, 10) || 1,
         initial_number: parseInt(req.body.initial_number, 10) || 1,
         template_copy_id: req.body.template_copy_id?.trim() || null,
+        launch_assets: parseLaunchAssetsFromBody(req.body),
         enabled: req.body.enabled === "1",
       });
       res.redirect("/admin/specialists");
