@@ -12,6 +12,7 @@ import {
 import { fetchCaptureEventById, fetchUpcomingCaptureEvents } from "../calendar";
 import {
   copyCopyTemplateToFolder,
+  createLaunchSupportAssets,
   ensureLaunchFolder,
   findFirstGoogleDocInFolder,
   resolveCopyTemplateId,
@@ -145,7 +146,11 @@ async function processCaptureEvent(
       jobRunId,
       "drive",
       stepDrive,
-      () => ensureLaunchFolder(folderPlan.copyParentFolderId, folderName),
+      async () => {
+        const folder = await ensureLaunchFolder(folderPlan.copyParentFolderId, folderName);
+        await createLaunchSupportAssets(specialistConfig, folderPlan.nextNumber);
+        return folder;
+      },
       !!options.retryLaunchRunId
     ) ?? await ensureLaunchFolder(folderPlan.copyParentFolderId, folderName);
 

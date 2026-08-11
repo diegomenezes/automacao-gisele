@@ -15,19 +15,40 @@ const CAPTURE_PATTERNS = [/CAPTAÇÃO/i, /\[CAPTACAO\]/i, /CAPTACAO/i];
 
 let calendarClient: calendar_v3.Calendar | null = null;
 
+const GOOGLE_SCOPES = [
+  "https://www.googleapis.com/auth/calendar.readonly",
+  "https://www.googleapis.com/auth/drive",
+  "https://www.googleapis.com/auth/documents",
+];
+
 export function getGoogleAuth() {
   const credentialsPath = config.google.credentialsPath;
   if (!fs.existsSync(credentialsPath)) {
     throw new Error(`Google credentials file not found: ${credentialsPath}`);
   }
   const credentials = JSON.parse(fs.readFileSync(credentialsPath, "utf-8"));
+
+  // Google Workspace: impersonate a domain user (required when calendar
+  // sharing only allows free/busy for external service accounts).
+  if (config.google.impersonateUser) {
+    if (!credentials.client_email || !credentials.private_key) {
+      throw new Error("credentials.json missing client_email or private_key");
+    }
+    logger.info(
+      { subject: config.google.impersonateUser },
+      "Google auth using domain-wide delegation"
+    );
+    return new google.auth.JWT({
+      email: credentials.client_email,
+      key: credentials.private_key,
+      scopes: GOOGLE_SCOPES,
+      subject: config.google.impersonateUser,
+    });
+  }
+
   return new google.auth.GoogleAuth({
     credentials,
-    scopes: [
-      "https://www.googleapis.com/auth/calendar.readonly",
-      "https://www.googleapis.com/auth/drive",
-      "https://www.googleapis.com/auth/documents",
-    ],
+    scopes: GOOGLE_SCOPES,
   });
 }
 

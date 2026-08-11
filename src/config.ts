@@ -25,6 +25,8 @@ export const config = {
   google: {
     credentialsPath: optional("GOOGLE_APPLICATION_CREDENTIALS", "./credentials.json"),
     calendarId: optional("GOOGLE_CALENDAR_ID", "primary"),
+    /** Workspace user to impersonate via domain-wide delegation */
+    impersonateUser: process.env.GOOGLE_IMPERSONATE_USER ?? "",
     driveRootFolderId: process.env.GOOGLE_DRIVE_ROOT_FOLDER_ID ?? "",
   },
   templates: {

@@ -119,6 +119,14 @@ function runMigrations(database: Database.Database): void {
   if (!preparedColumns.has("specialist_config_id")) {
     database.exec(`ALTER TABLE prepared_launches ADD COLUMN specialist_config_id TEXT`);
   }
+
+  const specialistInfo = database.prepare(`PRAGMA table_info(specialist_configs)`).all() as Array<{
+    name: string;
+  }>;
+  const specialistColumns = new Set(specialistInfo.map((c) => c.name));
+  if (!specialistColumns.has("launch_assets")) {
+    database.exec(`ALTER TABLE specialist_configs ADD COLUMN launch_assets TEXT`);
+  }
 }
 
 let db: Database.Database;

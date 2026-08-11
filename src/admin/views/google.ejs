@@ -33,10 +33,16 @@
   <ol style="color: var(--muted); padding-left: 1.2rem;">
     <li>Google Cloud: ativar Calendar, Drive e Docs API</li>
     <li>Criar service account → baixar <code>credentials.json</code></li>
-    <li>Compartilhar o calendário com o email da service account</li>
-    <li>Compartilhar cada raiz Drive de especialista como <strong>Editor</strong></li>
+    <li>No Google Workspace (recomendado): ativar <strong>delegação em todo o domínio</strong> e definir <code>GOOGLE_IMPERSONATE_USER</code></li>
+    <li>Alternativa: compartilhar o calendário com o email da service account (precisa ver detalhes dos eventos)</li>
+    <li>Compartilhar cada raiz Drive de especialista como <strong>Editor</strong> (ou usar a mesma delegação)</li>
     <li>Cadastrar especialistas em <a href="/admin/specialists">Especialistas</a></li>
   </ol>
+  <% if (impersonateUser) { %>
+    <p><strong>Impersonando:</strong> <code><%= impersonateUser %></code></p>
+  <% } else { %>
+    <p class="stat-label">Sem <code>GOOGLE_IMPERSONATE_USER</code> — auth direta da service account.</p>
+  <% } %>
 </div>
 
 <p><a href="/admin/integrations">Evolution API →</a></p>
